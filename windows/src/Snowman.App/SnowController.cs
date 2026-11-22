@@ -19,6 +19,7 @@ internal sealed class SnowController
     private double _lastPoll, _fastUntil, _lastTopmost, _lastFrame;
     private TimeSpan _lastRenderingTime;
     private bool _rebuildPending;
+    private long _frameCount;
 
     public SnowController(Application app)
     {
@@ -112,12 +113,15 @@ internal sealed class SnowController
                 foreach (var o in Overlays) ApplySnapshot(o, snap, now);
             }
         }
+        _frameCount++;
         foreach (var o in Overlays)
         {
             if (o.Scene is null) continue;
             o.Scene.Mouse = o.ToScene(cursor);
             o.Scene.Update(dt, now);
-            o.View.InvalidateVisual();
+            // A transparent window is re-uploaded whole every frame; on 4K-class monitors redraw at half rate.
+            bool huge = (long)o.MonitorBounds.Width * o.MonitorBounds.Height > 5_000_000;
+            if (!huge || o.Scene.WantsMouse || _frameCount % 2 == 0) o.View.InvalidateVisual();
             o.SetClickThrough(!o.Scene.WantsMouse);
         }
         if (now - _lastTopmost > 0.5)

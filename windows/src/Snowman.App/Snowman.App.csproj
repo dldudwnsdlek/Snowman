@@ -13,6 +13,7 @@
     <Product>Snowman</Product>
     <Description>눈 내리는 윈도우</Description>
     <SatelliteResourceLanguages>ko</SatelliteResourceLanguages>
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Snowman.Core\Snowman.Core.csproj" />

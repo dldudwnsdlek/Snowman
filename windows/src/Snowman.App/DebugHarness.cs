@@ -165,7 +165,11 @@ internal sealed class DebugHarness
         using var bmp = new System.Drawing.Bitmap(b.Width, b.Height);
         using (var g = System.Drawing.Graphics.FromImage(bmp))
         {
-            g.CopyFromScreen(b.Left, b.Top, 0, 0, b.Size, System.Drawing.CopyPixelOperation.SourceCopy | System.Drawing.CopyPixelOperation.CaptureBlt);
+            IntPtr dest = g.GetHdc();
+            IntPtr screen = Native.GetDC(IntPtr.Zero);
+            Native.BitBlt(dest, 0, 0, b.Width, b.Height, screen, b.Left, b.Top, Native.SRCCOPY | Native.CAPTUREBLT);
+            Native.ReleaseDC(IntPtr.Zero, screen);
+            g.ReleaseHdc(dest);
         }
         bmp.Save(Path.Combine(_dir, $"screen-{name}.png"), System.Drawing.Imaging.ImageFormat.Png);
     }

@@ -31,6 +31,12 @@ internal static class Native
     [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     public static extern bool SystemParametersInfo(uint action, uint param, string value, uint winIni);
 
+    [DllImport("user32.dll")] public static extern IntPtr GetDC(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern int ReleaseDC(IntPtr hWnd, IntPtr hdc);
+    [DllImport("gdi32.dll")] public static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int width, int height, IntPtr hdcSrc, int xSrc, int ySrc, uint rop);
+    public const uint SRCCOPY = 0x00CC0020;
+    public const uint CAPTUREBLT = 0x40000000;
+
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {

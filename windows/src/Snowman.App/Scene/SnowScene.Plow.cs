@@ -131,7 +131,7 @@ internal sealed partial class SnowScene
                 plow.Hopped.Add(man.Id);
                 man.State = FigureState.Flying;
                 man.Support = null;
-                man.Velocity = new VectorD(-plow.DriveSpeed * 0.9, 760);
+                man.Velocity = new VectorD(-plow.DriveSpeed * 0.9, 600);
                 man.Spin = 0;
                 man.DanceAfterLanding = true;
             }
