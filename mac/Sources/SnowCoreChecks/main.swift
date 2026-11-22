@@ -1,0 +1,6 @@
+runPileChecks()
+runLedgeChecks()
+runPhysicsChecks()
+runArtChecks()
+runWallpaperChecks()
+finish()

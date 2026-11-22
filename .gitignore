@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+*.user
+publish/
+ci-out/
+mac/.build/
+mac/Snowman.app/
+.DS_Store
