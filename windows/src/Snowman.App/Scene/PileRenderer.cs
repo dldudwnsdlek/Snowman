@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using Snowman.Core;
+using Visibility = Snowman.Core.Visibility;
 
 namespace Snowman.App.Scene;
 
