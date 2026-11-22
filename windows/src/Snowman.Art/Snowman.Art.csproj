@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Snowman.Art</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Snowman.Core\Snowman.Core.csproj" />
+  </ItemGroup>
+</Project>

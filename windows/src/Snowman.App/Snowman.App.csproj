@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>Snowman.App</RootNamespace>
+    <AssemblyName>Snowman</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Snowman.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Product>Snowman</Product>
+    <Description>눈 내리는 윈도우</Description>
+    <SatelliteResourceLanguages>ko</SatelliteResourceLanguages>
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Snowman.Core\Snowman.Core.csproj" />
+    <ProjectReference Include="..\Snowman.Art\Snowman.Art.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Snowman.ico" />
+  </ItemGroup>
+</Project>

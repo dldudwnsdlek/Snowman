@@ -1,0 +1,40 @@
+# CI smoke test, run by the app itself (SNOWMAN_DEBUG_SCRIPT). Coordinates are for the 1024x768 runner screen.
+wait 2.5
+notepad 160 160 620 400
+wait 2.5
+amount heavy
+fill 9
+wait 0.3
+snap fill
+spawn santa
+wait 4
+snap snowman
+screenshot snowman
+roll 260 460
+roll 700 860 460 300
+wait 3.2
+snap stack
+throw 1700 300
+wait 0.3
+snap throw
+screenshot throw
+wait 2
+plow
+wait 2.2
+snap plow
+screenshot plow
+wait 3
+close notepad
+wait 0.4
+snap closed
+screenshot closed
+wait 2
+wallpaper 0
+wait 5
+screenshot wallpaper
+restore
+wait 1
+help
+wait 1.5
+snap final
+quit

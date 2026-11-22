@@ -1,0 +1,78 @@
+name: Windows build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Prepare
+        run: New-Item -ItemType Directory -Force ci-out | Out-Null
+
+      - name: Build
+        run: |
+          dotnet build windows/Snowman.sln -c Release 2>&1 | Tee-Object -FilePath ci-out/build.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Logic and art checks
+        run: |
+          dotnet run --project windows/tests/Snowman.Checks -c Release --no-build 2>&1 | Tee-Object -FilePath ci-out/checks.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Publish single-file Snowman.exe
+        run: |
+          dotnet publish windows/src/Snowman.App/Snowman.App.csproj -c Release -r win-x64 --self-contained true `
+            -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true `
+            -o publish 2>&1 | Tee-Object -FilePath ci-out/publish.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-ChildItem publish | Format-Table Name, Length -AutoSize | Out-String -Width 200 | Tee-Object -FilePath ci-out/publish-files.txt
+
+      - name: Smoke test on the Windows desktop
+        run: |
+          $out = (Resolve-Path ci-out).Path
+          $env:SNOWMAN_DEBUG_DIR = $out
+          $env:SNOWMAN_DEBUG_SCRIPT = (Resolve-Path windows/ci/smoke.txt).Path
+          $p = Start-Process -FilePath publish/Snowman.exe -PassThru
+          if (-not $p.WaitForExit(180000)) { Stop-Process -Id $p.Id -Force; "timeout" | Out-File "$out/smoke-timeout.txt" }
+          "exit code: $($p.ExitCode)" | Out-File "$out/smoke-exit.txt"
+          $log = Join-Path $env:LOCALAPPDATA "Snowman/snowman.log"
+          if (Test-Path $log) { Copy-Item $log $out }
+          if (-not (Test-Path "$out/snap-final-0.png")) { Write-Error "smoke test did not finish"; exit 1 }
+
+      - name: Zip
+        run: Compress-Archive -Path publish/Snowman.exe -DestinationPath Snowman-win-x64.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Snowman-win-x64
+          path: |
+            Snowman-win-x64.zip
+            ci-out/
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.ref_name }}" Snowman-win-x64.zip --title "Snowman ${{ github.ref_name }}" --notes-file windows/RELEASE_NOTES.md
