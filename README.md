@@ -6,7 +6,8 @@
 - **Windows 10/11** — `windows/` (C# · .NET 8 · WPF)
 - **macOS 14+** — `mac/` (Swift · AppKit · SpriteKit)
 
-두 버전은 같은 기능, 같은 그림(눈사람 5종, 겨울 배경화면 10종)을 씁니다. 그림은 모두 코드로 그렸어요.
+두 버전은 같은 기능과 같은 그림(눈사람 5종)을 씁니다. 그림은 모두 코드로 그렸어요.
+Windows 버전은 바탕화면을 바꾸지 않아요. 겨울 배경화면 10종은 macOS 버전에만 있어요.
 
 ## Windows에서 쓰기
 
@@ -17,7 +18,7 @@
 
 - 끄기: ❄ 메뉴 → **끝내기**
 - 컴퓨터를 켤 때 자동으로 실행하려면: `Win + R` → `shell:startup` 입력 → 열린 폴더에 `Snowman.exe` 바로 가기를 넣으세요.
-- 설정은 `%APPDATA%\Snowman`, 배경화면 이미지와 로그는 `%LOCALAPPDATA%\Snowman`에 저장돼요.
+- 설정은 `%APPDATA%\Snowman`, 로그는 `%LOCALAPPDATA%\Snowman`에 저장돼요.
 
 ## 기능
 
@@ -33,7 +34,7 @@
 | 8 | 눈사람 5종 | 산타 · 비니 · 신사 · 귀마개 · 요정. 모자, 목도리, 표정이 모두 달라요. |
 | 9 | 던지면 와장창 | 눈사람을 잡고 휙 던지면 화면 가장자리에 부딪혀 반대로 튕겨요. 아주 세게 던지면 부서져 눈덩이 두 개로 돌아가요. |
 | 10 | 눈 양 조절 | 메뉴 `눈 양`에서 조금 / 보통 / 펑펑. `눈 멈추기`로 잠시 멈출 수도 있어요. |
-| 11 | 겨울 배경화면 10종 | `겨울 배경화면 고르기`에서 고르는 즉시 바뀌어요. `원래 배경화면으로`를 누르면 처음 배경화면으로 돌아가요. |
+| 11 | 겨울 배경화면 10종 | macOS 버전에만 있어요. Windows 버전은 바탕화면을 건드리지 않아요. |
 
 평소 클릭은 그대로 아래 창으로 전달돼요. 쌓인 눈, 눈덩이, 눈사람 위에 마우스가 있을 때만 앱이 클릭을 받아요.
 창을 최대화하면 위쪽에 눈이 쌓일 자리가 없어서, 최대화하지 않은 창에 눈이 쌓여요.
@@ -66,7 +67,7 @@ dotnet publish windows/src/Snowman.App/Snowman.App.csproj -c Release -r win-x64 
 ```
 windows/
   src/Snowman.Core/     눈 높이맵, 선반·가림 계산, 물리 (순수 로직)
-  src/Snowman.Art/      눈사람·제설차·배경화면을 그리는 코드 (SkiaSharp)
+  src/Snowman.Art/      눈사람·제설차·눈송이를 그리는 코드 (SkiaSharp)
   src/Snowman.App/      Windows 앱 (투명 오버레이, 알림 영역 메뉴, 창 추적)
   tests/Snowman.Checks/ 검사 실행기
 mac/                    macOS 버전 (Swift)

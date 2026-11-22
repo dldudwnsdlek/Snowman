@@ -13,7 +13,6 @@ internal sealed class Settings
     public bool Paused { get; set; }
     public bool AccumulateOnWindows { get; set; } = true;
     public bool SoundOn { get; set; } = true;
-    public int? CurrentWallpaper { get; set; }
 
     [JsonIgnore]
     public SnowAmount AmountValue

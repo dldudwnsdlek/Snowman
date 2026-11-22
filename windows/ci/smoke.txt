@@ -29,11 +29,6 @@ wait 0.4
 snap closed
 screenshot closed
 wait 2
-wallpaper 0
-wait 5
-screenshot wallpaper
-restore
-wait 1
 help
 wait 1.5
 snap final

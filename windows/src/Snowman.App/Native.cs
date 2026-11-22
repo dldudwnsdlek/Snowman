@@ -66,10 +66,6 @@ internal static class Native
     public const uint SWP_NOACTIVATE = 0x10;
     public const uint SWP_NOOWNERZORDER = 0x200;
     public const int VK_LBUTTON = 0x01;
-    public const uint SPI_GETDESKWALLPAPER = 0x0073;
-    public const uint SPI_SETDESKWALLPAPER = 0x0014;
-    public const uint SPIF_UPDATEINIFILE = 0x01;
-    public const uint SPIF_SENDCHANGE = 0x02;
     public const uint WM_CLOSE = 0x0010;
 
     public static string ClassName(IntPtr h)

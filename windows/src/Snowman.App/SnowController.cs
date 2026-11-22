@@ -25,11 +25,9 @@ internal sealed class SnowController
     {
         _app = app;
         Settings = Settings.Load();
-        Wallpapers = new WallpaperManager(Settings);
     }
 
     public Settings Settings { get; }
-    public WallpaperManager Wallpapers { get; }
     public List<OverlayWindow> Overlays { get; } = new();
     public TrackerSnapshot? LastSnapshot { get; private set; }
     public double Now => _clock.Elapsed.TotalSeconds;
@@ -41,7 +39,6 @@ internal sealed class SnowController
         _tray = new TrayMenu(this);
         CompositionTarget.Rendering += OnFrame;
         Microsoft.Win32.SystemEvents.DisplaySettingsChanged += (_, _) => _app.Dispatcher.BeginInvoke(new Action(RequestRebuild));
-        Wallpapers.PrerenderAll();
         _debug = DebugHarness.TryCreate(this);
     }
 

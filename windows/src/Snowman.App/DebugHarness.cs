@@ -90,8 +90,6 @@ internal sealed class DebugHarness
                     case "fill": scene?.DebugFill(Num(1)); break;
                     case "roll": scene?.DebugRoll(Num(1), Num(2), parts.Length > 4 ? new PointD(Num(3), Num(4)) : null); break;
                     case "throw": scene?.DebugThrow(Num(1), Num(2)); break;
-                    case "wallpaper": _c.Wallpapers.Apply((int)Num(1)); break;
-                    case "restore": _c.Wallpapers.RestoreOriginal(); break;
                     case "help": await RenderHelp(); break;
                     case "notepad": await OpenNotepad((int)Num(1), (int)Num(2), (int)Num(3), (int)Num(4)); break;
                     case "close":

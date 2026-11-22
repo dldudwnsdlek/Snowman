@@ -15,11 +15,9 @@ internal sealed class TrayMenu : IDisposable
     private readonly NotifyIcon _icon;
     private readonly ContextMenuStrip _menu = new();
     private readonly Dictionary<SnowAmount, ToolStripMenuItem> _amountItems = new();
-    private readonly List<ToolStripMenuItem> _wallpaperItems = new();
     private readonly ToolStripMenuItem _pause;
     private readonly ToolStripMenuItem _windows;
     private readonly ToolStripMenuItem _sound;
-    private readonly ToolStripMenuItem _restore;
 
     public TrayMenu(SnowController controller)
     {
@@ -55,27 +53,6 @@ internal sealed class TrayMenu : IDisposable
         _menu.Items.Add(Item("눈사람 모두 치우기", _c.ClearSnowmen));
         _menu.Items.Add(new ToolStripSeparator());
 
-        var wallpapers = new ToolStripMenuItem("겨울 배경화면 고르기 🖼");
-        foreach (var w in WallpaperArt.All)
-        {
-            var wall = w;
-            var it = Item(w.Title(), () => { _c.Wallpapers.Apply((int)wall); });
-            it.Tag = (int)w;
-            it.ImageScaling = ToolStripItemImageScaling.None;
-            _wallpaperItems.Add(it);
-            wallpapers.DropDownItems.Add(it);
-        }
-        if (wallpapers.DropDown is ToolStripDropDownMenu dd)
-        {
-            dd.ShowCheckMargin = true;
-            dd.ShowImageMargin = true;
-            dd.ImageScalingSize = new Size(64, 40);
-        }
-        _menu.Items.Add(wallpapers);
-        _restore = Item("원래 배경화면으로", _c.Wallpapers.RestoreOriginal);
-        _menu.Items.Add(_restore);
-        _menu.Items.Add(new ToolStripSeparator());
-
         _sound = Item("효과음", () => _c.SetSound(!_c.Settings.SoundOn));
         _menu.Items.Add(_sound);
         _menu.Items.Add(Item("사용법", HelpWindow.ShowHelp));
@@ -97,12 +74,6 @@ internal sealed class TrayMenu : IDisposable
             _menu.Close();
             action();
         };
-
-        _c.Wallpapers.MakeThumbnails(thumbs =>
-        {
-            foreach (var it in _wallpaperItems)
-                if (it.Tag is int tag && thumbs.TryGetValue(tag, out var bmp)) it.Image = bmp;
-        });
 
         using var trayImage = SpriteArt.TraySnowflake(32);
         using var bitmap = Sprites.ToGdi(trayImage);
@@ -146,8 +117,6 @@ internal sealed class TrayMenu : IDisposable
         foreach (var (a, it) in _amountItems) it.Checked = a == s.AmountValue;
         _windows.Checked = s.AccumulateOnWindows;
         _sound.Checked = s.SoundOn;
-        foreach (var it in _wallpaperItems) it.Checked = it.Tag is int tag && tag == s.CurrentWallpaper;
-        _restore.Enabled = _c.Wallpapers.HasSavedOriginal;
     }
 
     public void Dispose()
